@@ -14,12 +14,11 @@
 
 var $event = $.event,
 	$special,
-	dummy = {_:0},
 	frame = 0,
-	wasResized, animRunning;
+	interval, wasResized, animRunning;
 
 $special = $event.special.throttledresize = {
-	setup: function() {
+	setup: function () {
 		$( this ).on( "resize", $special.handler );
 	},
 	teardown: function() {
@@ -33,7 +32,7 @@ $special = $event.special.throttledresize = {
 		wasResized = true;
 
 		if ( !animRunning ) {
-			setInterval(function(){
+			interval = setInterval(function(){
 				frame++;
 
 				if ( frame > $special.threshold && wasResized || execAsap ) {
@@ -44,7 +43,7 @@ $special = $event.special.throttledresize = {
 					frame = 0;
 				}
 				if ( frame > 9 ) {
-					$(dummy).stop();
+					clearInterval(interval);
 					animRunning = false;
 					frame = 0;
 				}
